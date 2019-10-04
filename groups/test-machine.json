@@ -1,0 +1,7 @@
+{
+  "name": "test",
+  "profile": "debian-installer",
+  "selector": {
+    "mac": ""
+  }
+}
