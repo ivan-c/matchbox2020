@@ -1,0 +1,55 @@
+---
+version: "3.4"
+x-dnsmasq-base: &dnsmasq_base
+  # hash corresponding to `latest`
+  image: quay.io/poseidon/dnsmasq@sha256:2f86d39e36dbbc97fc8cf282d63c94860c98e47792f4fd80d710e79a4e0a52c2
+  entrypoint:
+    - dnsmasq
+    - --log-facility=-
+    - --keep-in-foreground
+    - --user=root
+
+services:
+  matchbox:
+    image: quay.io/poseidon/matchbox:v0.8.0
+    volumes:
+      - ./:/var/lib/matchbox:ro
+    environment:
+      MATCHBOX_LOG_LEVEL: debug
+      MATCHBOX_ADDRESS: 0.0.0.0:8080
+      MATCHBOX_ASSETS_PATH: /tmp
+    ports:
+      - 8080:8080
+
+  dhcpd:
+    <<: *dnsmasq_base
+    # todo: use dhcp relay
+    network_mode: host
+    command:
+      - --log-queries
+      - --log-dhcp
+
+      - --dhcp-range=192.168.1.0,proxy
+
+      # if DHCP userclass is iPXE, add ipxe tag
+      - --dhcp-userclass=set:ipxe,iPXE
+
+      # 1st request: download BIOS iPXE image via TFTP and run
+      - --pxe-service=x86PC,Boot iPXE with BIOS,pxelinux,${next_server}
+      # 1st request: download EFI iPXE image via TFTP and run
+      - --pxe-service=tag:!ipxe,x86-64_EFI,Boot iPXE with EFI,ipxe.efi,${next_server}
+
+      # 2nd request: download iPXE script via HTTP and run
+      - --pxe-service=tag:ipxe,x86-64_EFI,Boot system-specific iPXE script,http://${next_server}:8080/boot.ipxe
+    ports:
+      # DHCP
+      - "67:67/udp"
+
+  tftpd:
+    <<: *dnsmasq_base
+    command:
+      - --port=0
+      - --enable-tftp
+      - --tftp-root=/var/lib/tftpboot
+    ports:
+      - "69:69/udp"
