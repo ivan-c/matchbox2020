@@ -2,6 +2,9 @@
   "name": "test",
   "profile": "debian-installer",
   "selector": {
-    "mac": ""
+    "mac": "${__TEST_MAC}"
+  },
+  "metadata": {
+    "proxy": {"http":"${__http_proxy}"}
   }
 }
