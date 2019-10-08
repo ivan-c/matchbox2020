@@ -16,11 +16,16 @@ services:
   matchbox:
     image: quay.io/poseidon/matchbox:v0.8.0
     volumes:
-      - ./:/var/lib/matchbox:ro
+      - ./:/tmp/matchbox:ro
+      - ./docker-entrypoint.sh:/bin/entrypoint.sh:ro
+      - ./docker-entrypoint.d:/docker-entrypoint.d:ro
     environment:
       MATCHBOX_LOG_LEVEL: debug
       MATCHBOX_ADDRESS: 0.0.0.0:8080
       MATCHBOX_ASSETS_PATH: /tmp
+    entrypoint: /bin/entrypoint.sh
+    command: /matchbox
+    env_file: matchbox.env
     ports:
       - 8080:8080
 
