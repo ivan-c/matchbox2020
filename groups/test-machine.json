@@ -5,6 +5,9 @@
     "mac": "${__TEST_MAC}"
   },
   "metadata": {
+    "boot": {
+      "hostname": "${__TEST_HOSTNAME}"
+    },
     "proxy": {"http":"${__http_proxy}"}
   }
 }
