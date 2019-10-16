@@ -1,0 +1,11 @@
+FROM alpine:3.10
+ARG version=v0.8.0
+ARG arch=amd64
+ADD https://github.com/poseidon/matchbox/releases/download/$version/matchbox-$version-linux-$arch.tar.gz ./
+RUN \
+    tar xvf matchbox-$version-linux-$arch.tar.gz matchbox-$version-linux-$arch/matchbox && \
+    mv matchbox-$version-linux-$arch/matchbox /bin && \
+    rm matchbox-$version-linux-$arch.tar.gz
+
+EXPOSE 8080
+ENTRYPOINT ["/bin/matchbox"]
