@@ -1,8 +1,9 @@
 ---
 version: "3.4"
 x-dnsmasq-base: &dnsmasq_base
-  # hash corresponding to `latest`
-  image: quay.io/poseidon/dnsmasq@sha256:2f86d39e36dbbc97fc8cf282d63c94860c98e47792f4fd80d710e79a4e0a52c2
+  build:
+    dockerfile: Dockerfile.dnsmasq
+    context: .
   entrypoint:
     - dnsmasq
     - --log-facility=-
@@ -14,7 +15,11 @@ x-dnsmasq-base: &dnsmasq_base
 
 services:
   matchbox:
-    image: quay.io/poseidon/matchbox:v0.8.0
+    build:
+      dockerfile: Dockerfile.matchbox
+      context: .
+      args:
+        arch: ${arch:-amd64}
     volumes:
       - ./:/tmp/matchbox:ro
       - ./docker-entrypoint.sh:/bin/entrypoint.sh:ro
@@ -24,7 +29,7 @@ services:
       MATCHBOX_ADDRESS: 0.0.0.0:8080
       MATCHBOX_ASSETS_PATH: /tmp
     entrypoint: /bin/entrypoint.sh
-    command: /matchbox
+    command: /bin/matchbox
     env_file: matchbox.env
     ports:
       - 8080:8080
