@@ -15,8 +15,6 @@ services:
     build:
       dockerfile: Dockerfile.matchbox
       context: .
-      args:
-        arch: ${arch:-amd64}
     volumes:
       - ./:/tmp/matchbox:ro
       - ./docker-entrypoint.sh:/bin/entrypoint.sh:ro

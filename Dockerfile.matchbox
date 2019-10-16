@@ -1,11 +1,19 @@
-FROM alpine:3.10
-ARG version=v0.8.0
-ARG arch=amd64
-ADD https://github.com/poseidon/matchbox/releases/download/$version/matchbox-$version-linux-$arch.tar.gz ./
-RUN \
-    tar xvf matchbox-$version-linux-$arch.tar.gz matchbox-$version-linux-$arch/matchbox && \
-    mv matchbox-$version-linux-$arch/matchbox /bin && \
-    rm matchbox-$version-linux-$arch.tar.gz
+FROM golang:alpine as builder
+RUN apk add make git
 
+ARG version=v0.8.0
+RUN \
+    git clone https://github.com/poseidon/matchbox/ \
+        --branch $version \
+        --depth 1 && \
+    cd matchbox && \
+    make build && \
+    mv bin/matchbox /bin && \
+    cd .. && rm -Rf matchbox
+
+# ---
+FROM alpine:3.10 as final
+COPY --from=builder bin/matchbox /bin/matchbox
 EXPOSE 8080
+
 ENTRYPOINT ["/bin/matchbox"]
