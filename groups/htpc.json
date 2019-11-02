@@ -1,0 +1,13 @@
+{
+  "name": "htpc",
+  "profile": "debian-installer",
+  "selector": {
+    "mac": "${__HTPC_MAC}"
+  },
+  "metadata": {
+    "boot": {
+      "hostname": "${__HTPC_HOSTNAME}"
+    },
+    "proxy": {"http":"${__http_proxy}"}
+  }
+}
