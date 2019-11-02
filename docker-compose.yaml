@@ -46,7 +46,7 @@ services:
       - --dhcp-userclass=set:ipxe,iPXE
 
       # 1st request: download BIOS iPXE image via TFTP and run
-      - --pxe-service=x86PC,Boot iPXE with BIOS,pxelinux,${next_server}
+      - --pxe-service=x86PC,Boot iPXE with BIOS,undionly.kpxe,${next_server}
       # 1st request: download EFI iPXE image via TFTP and run
       - --pxe-service=tag:!ipxe,x86-64_EFI,Boot iPXE with EFI,ipxe.efi,${next_server}
 
