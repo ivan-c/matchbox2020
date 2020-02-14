@@ -8,6 +8,7 @@
     "boot": {
       "hostname": "${__HTPC_HOSTNAME}"
     },
+    "playbook_repo": "${__playbook_repo}",
     "proxy": {"http":"${__http_proxy}"}
   }
 }
