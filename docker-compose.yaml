@@ -42,6 +42,10 @@ services:
       # if DHCP userclass is iPXE, add ipxe tag
       - --dhcp-userclass=set:ipxe,iPXE
 
+
+      # raspberry pi; does not support iPXE
+      - --pxe-service=tag:!ipxe,0,Raspberry Pi Boot,Netboot RaspberryPi,start.elf,${next_server}
+
       # 1st request: download BIOS iPXE image via TFTP and run
       - --pxe-service=tag:!ipxe,x86PC,Boot iPXE with BIOS,undionly.kpxe,${next_server}
       # 1st request: download EFI iPXE image via TFTP and run
