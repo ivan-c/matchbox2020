@@ -41,10 +41,18 @@ services:
 
       # if DHCP userclass is iPXE, add ipxe tag
       - --dhcp-userclass=set:ipxe,iPXE
+      # if DHCP userclass is U-Boot arm64, add uboot tag
+      - --dhcp-vendorclass=set:uboot,U-Boot.armv8
+
 
 
       # raspberry pi; does not support iPXE
+      # 1st request: download raspberry pi firmware, loads U-Boot via TFTP
       - --pxe-service=tag:!ipxe,0,Raspberry Pi Boot,Netboot RaspberryPi,start.elf,${next_server}
+
+      # 2nd request: download U-Boot config
+      - --pxe-service=tag:uboot,0,Raspberry Pi Boot,Netboot RaspberryPi,boot.scr,${next_server}
+
 
       # 1st request: download BIOS iPXE image via TFTP and run
       - --pxe-service=tag:!ipxe,x86PC,Boot iPXE with BIOS,undionly.kpxe,${next_server}
