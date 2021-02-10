@@ -42,6 +42,12 @@ services:
       # if DHCP userclass is iPXE, add ipxe tag
       - --dhcp-userclass=set:ipxe,iPXE
 
+      # tag arm64 UEFI by client-arch
+      - --dhcp-match=set:efi-arm64,option:client-arch,11
+
+      # boot iPXE arm64 EFI from UEFI
+      - --dhcp-boot=tag:efi-arm64,tag:!ipxe,ipxe.build.efi
+
       # Raspberry Pi uses the same client-arch as PC BIOS and downloads its own set of files
       - --pxe-service=tag:!ipxe,x86PC,Raspberry Pi Boot,Netboot RaspberryPi,${next_server}
 
