@@ -51,10 +51,8 @@ services:
       # Raspberry Pi uses the same client-arch as PC BIOS and downloads its own set of files
       - --pxe-service=tag:!ipxe,x86PC,Raspberry Pi Boot,Netboot RaspberryPi,${next_server}
 
-
-      # 1st request: download BIOS iPXE image via TFTP and run
+      # 1st request: download iPXE image
       - --pxe-service=tag:!ipxe,x86PC,Boot iPXE with BIOS,undionly.kpxe,${next_server}
-      # 1st request: download EFI iPXE image via TFTP and run
       - --pxe-service=tag:!ipxe,x86-64_EFI,Boot iPXE with EFI,ipxe.efi,${next_server}
 
       # 2nd request: download iPXE script via HTTP and run
