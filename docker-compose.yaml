@@ -42,10 +42,15 @@ services:
       # if DHCP userclass is iPXE, add ipxe tag
       - --dhcp-userclass=set:ipxe,iPXE
 
+      # 0th request: download Raspberry Pi firmware
+      # Raspberry Pi uses the same client-arch as PC BIOS and downloads its own set of files
+      # TODO tag/filter by MAC/serial
+      - --pxe-service=tag:!ipxe,x86PC,Raspberry Pi Boot,Netboot RaspberryPi,${next_server}
 
       # 1st request: download iPXE image
       - --pxe-service=tag:!ipxe,x86PC,Boot iPXE with BIOS,ipxe/undionly.kpxe,${next_server}
       - --pxe-service=tag:!ipxe,x86-64_EFI,Boot iPXE with EFI,ipxe/ipxe.efi,${next_server}
+      - --pxe-service=tag:!ipxe,ARM64_EFI,Boot iPXE with EFI,ipxe/ipxe.arm64.efi,${next_server}
 
       # 2nd request: download iPXE script via HTTP and run
       - --dhcp-boot=tag:ipxe,http://${next_server}:8080/boot.ipxe
@@ -62,3 +67,8 @@ services:
       - --tftp-root=/var/lib/tftpboot
     ports:
       - "69:69/udp"
+
+    # TODO build universal (not machine-specific) tftp files into docker image
+    # https://github.com/pftf/RPi4/issues/59
+    volumes:
+      - ./tftpboot:/var/lib/tftpboot
