@@ -41,10 +41,10 @@ services:
       # if DHCP userclass is iPXE, add ipxe tag
       - --dhcp-userclass=set:ipxe,iPXE
 
-      # 1st request: download BIOS iPXE image via TFTP and run
-      - --pxe-service=tag:!ipxe,x86PC,Boot iPXE with BIOS,undionly.kpxe,${next_server}
-      # 1st request: download EFI iPXE image via TFTP and run
-      - --pxe-service=tag:!ipxe,x86-64_EFI,Boot iPXE with EFI,ipxe.efi,${next_server}
+
+      # 1st request: download iPXE image
+      - --pxe-service=tag:!ipxe,x86PC,Boot iPXE with BIOS,ipxe/undionly.kpxe,${next_server}
+      - --pxe-service=tag:!ipxe,x86-64_EFI,Boot iPXE with EFI,ipxe/ipxe.efi,${next_server}
 
       # DHCP option 66 (Server-Name) is only populated for dnsmasq pxe-services
       # TODO consolidate to single dhcp-boot entry when host can be parsed from DHCP filename (URL), or manually set DHCP option 66

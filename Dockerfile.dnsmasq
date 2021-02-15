@@ -2,9 +2,12 @@ FROM alpine:3.10
 RUN apk --update-cache add dnsmasq
 
 ARG TFTP_ROOT=/var/lib/tftpboot
-RUN mkdir $TFTP_ROOT
-ADD http://boot.ipxe.org/undionly.kpxe $TFTP_ROOT
-ADD http://boot.ipxe.org/ipxe.efi $TFTP_ROOT
+
+RUN mkdir -p $TFTP_ROOT/ipxe
+
+ADD http://boot.ipxe.org/undionly.kpxe $TFTP_ROOT/ipxe
+ADD http://boot.ipxe.org/ipxe.efi $TFTP_ROOT/ipxe
+
 RUN chmod -R 644 $TFTP_ROOT
 
 EXPOSE 53 67 69
