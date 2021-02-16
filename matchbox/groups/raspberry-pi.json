@@ -1,0 +1,8 @@
+{
+  "name": "raspberry-pi",
+  "profile": "raspi-nfs-boot",
+  "selector": {
+    "buildarch": "arm64",
+    "manufacturer": "Raspberry Pi Foundation"
+  }
+}

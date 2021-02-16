@@ -1,0 +1,20 @@
+{
+  "id": "raspi-nfs-boot",
+  "name": "boot debian over NFS root",
+  "boot": {
+    "kernel": "nfs://${__nfs_host}/${__nfs_host}/system-images/rpi4b/debian-arm64/${mac:hexhyp}/boot/vmlinuz",
+    "initrd": ["nfs://${__nfs_host}/${__nfs_host}/system-images/rpi4b/debian-arm64/${mac:hexhyp}/boot/initrd.img"],
+    "args": [
+      "initrd=initrd.img",
+      "earlyprintk",
+      "dwc_otg.lpm_enable=0",
+      "console=tty1",
+      "root=/dev/nfs",
+      "nfsroot=${__nfs_ip}:/${__nfs_host}/system-images/rpi4b/debian-arm64/${mac:hexhyp},vers=3",
+      "rw",
+      "ip=dhcp",
+      "rootwait",
+      "elevator=deadline"
+    ]
+  }
+}
