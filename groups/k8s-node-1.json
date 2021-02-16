@@ -1,0 +1,7 @@
+{
+  "name": "k8s-node-1",
+  "profile": "raspi-nfs-boot",
+  "selector": {
+    "hostname": "jolteon"
+  }
+}

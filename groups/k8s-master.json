@@ -1,0 +1,7 @@
+{
+  "name": "k8s-master",
+  "profile": "raspi-nfs-boot",
+  "selector": {
+    "hostname": "eevee"
+  }
+}

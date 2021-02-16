@@ -1,0 +1,7 @@
+{
+  "name": "k8s-node-0",
+  "profile": "raspi-nfs-boot",
+  "selector": {
+    "hostname": "vaporeon"
+  }
+}
