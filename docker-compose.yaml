@@ -16,13 +16,12 @@ services:
       dockerfile: Dockerfile.matchbox
       context: .
     volumes:
-      - ./:/tmp/matchbox:ro
+      - ./matchbox:/tmp/matchbox:ro
       - ./docker-entrypoint.sh:/bin/entrypoint.sh:ro
       - ./docker-entrypoint.d:/docker-entrypoint.d:ro
     environment:
       MATCHBOX_LOG_LEVEL: debug
       MATCHBOX_ADDRESS: 0.0.0.0:8080
-      MATCHBOX_ASSETS_PATH: /tmp
     entrypoint: /bin/entrypoint.sh
     command: /bin/matchbox
     env_file: matchbox.env
