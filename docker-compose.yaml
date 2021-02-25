@@ -41,10 +41,13 @@ services:
       # if DHCP userclass is iPXE, add ipxe tag
       - --dhcp-userclass=set:ipxe,iPXE
 
+      # Set Raspberry Pi tag if beginning of DHCP option 97 (UUID/GUID) matches known values
+      - --dhcp-match=set:raspi,option:client-machine-id,00:52:50
+
+
       # 0th request: download Raspberry Pi firmware
       # Raspberry Pi uses the same client-arch as PC BIOS and downloads its own set of files
-      # TODO tag/filter by MAC/serial
-      - --pxe-service=tag:!ipxe,x86PC,Raspberry Pi Boot,Netboot RaspberryPi,${next_server}
+      - --pxe-service=tag:!ipxe,tag:raspi,x86PC,Raspberry Pi Boot,Netboot RaspberryPi,${next_server}
 
       # 1st request: download iPXE image
       - --pxe-service=tag:!ipxe,x86PC,Boot iPXE with BIOS,ipxe/undionly.kpxe,${next_server}
