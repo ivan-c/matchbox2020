@@ -50,12 +50,13 @@ services:
 
       # 0th request: download Raspberry Pi firmware
       # Raspberry Pi uses the same client-arch as PC BIOS and downloads its own set of files
-      - --pxe-service=tag:!ipxe,tag:raspi,x86PC,Raspberry Pi Boot,Netboot RaspberryPi,${next_server}
+      - --pxe-service=tag:!ipxe,tag:raspi,x86PC,Raspberry Pi Boot,Netboot RaspberryPi,0.0.0.0
 
       # 1st request: download iPXE image
-      - --pxe-service=tag:!ipxe,x86PC,Boot iPXE with BIOS,ipxe/undionly.kpxe,${next_server}
-      - --pxe-service=tag:!ipxe,x86-64_EFI,Boot iPXE with EFI,ipxe/ipxe.efi,${next_server}
-      - --pxe-service=tag:!ipxe,ARM64_EFI,Boot iPXE with EFI,ipxe/ipxe.arm64.efi,${next_server}
+      # 0.0.0.0 is a special value recognized by dnsmasq as the dnsmasq IP address
+      - --pxe-service=tag:!ipxe,x86PC,Boot iPXE with BIOS,ipxe/undionly.kpxe,0.0.0.0
+      - --pxe-service=tag:!ipxe,x86-64_EFI,Boot iPXE with EFI,ipxe/ipxe.efi,0.0.0.0
+      - --pxe-service=tag:!ipxe,ARM64_EFI,Boot iPXE with EFI,ipxe/ipxe.arm64.efi,0.0.0.0
 
       # DHCP option 66 (Server-Name) is only populated for dnsmasq pxe-services
       # TODO consolidate to single dhcp-boot entry when host can be parsed from DHCP filename (URL), or manually set DHCP option 66
