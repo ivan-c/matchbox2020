@@ -7,7 +7,6 @@
     "args": [
       "initrd=initrd.img",
       "earlyprintk",
-      "dwc_otg.lpm_enable=0",
       "console=tty1",
       "root=/dev/nfs",
       "nfsroot=${__nfs_ip}:/${__nfs_host}/system-images/rpi4b/debian-arm64/${mac:hexhyp},vers=3",
