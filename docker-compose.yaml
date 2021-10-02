@@ -61,9 +61,8 @@ services:
       - --pxe-service=tag:ipxe,x86-64_EFI,Boot system-specific iPXE script,http://${server}:8080/assets/introspect.ipxe
       - --pxe-service=tag:ipxe,x86PC,Boot system-specific iPXE script,http://${server}:8080/assets/introspect.ipxe
       - --pxe-service=tag:ipxe,ARM64_EFI,Boot system-specific iPXE script,http://${server}:8080/assets/introspect.ipxe
-    ports:
-      # DHCP
-      - "67:67/udp"
+    cap_add:
+      - NET_ADMIN
 
   tftpd:
     <<: *dnsmasq_base
