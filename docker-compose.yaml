@@ -10,6 +10,9 @@ x-dnsmasq-base: &dnsmasq_base
     - --keep-in-foreground
     - --user=root
 
+    # disable DNS (port 53)
+    - --port=0
+
 services:
   matchbox:
     build:
@@ -67,7 +70,6 @@ services:
   tftpd:
     <<: *dnsmasq_base
     command:
-      - --port=0
       - --enable-tftp
       - --tftp-root=/var/lib/tftpboot
     ports:
