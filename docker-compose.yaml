@@ -12,9 +12,11 @@ x-dnsmasq-base: &dnsmasq_base
 
     # disable DNS (port 53)
     - --port=0
+  restart: unless-stopped
 
 services:
   matchbox:
+    restart: unless-stopped
     build:
       dockerfile: Dockerfile.matchbox
       context: .
