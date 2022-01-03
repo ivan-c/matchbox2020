@@ -41,6 +41,8 @@ services:
       - --log-queries
       - --log-dhcp
 
+      # Act as ProxyDHCP server
+      # only respond to PXE requests coming from same subnet as the given IP
       - --dhcp-range=192.168.1.0,proxy
 
 
@@ -48,6 +50,8 @@ services:
       - --dhcp-match=set:raspi-bootloader,option:client-machine-id,00:52:50
       # Raspberry Pi bootloader identifies PC BIOS client system type (CSA) and requires a specific DHCP Offer with the following text
       - --pxe-service=tag:raspi-bootloader,x86PC,Raspberry Pi Boot
+      # Raspberry Pi bootloader downloads config.txt and loads file configured as `kernel`, generally U-Boot
+
 
       # U-Boot PXE client identifies as ARM64_EFI client system type (CSA)
       - --dhcp-match=set:arm64_efi,option:client-arch,11
