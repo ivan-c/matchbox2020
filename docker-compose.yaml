@@ -46,7 +46,7 @@ services:
 
       # Add tag for Raspberry Pi if beginning of DHCP option 97 (UUID/GUID) matches known values for raspi bootloader (`RPi` in ASCII)
       - --dhcp-match=set:raspi-bootloader,option:client-machine-id,00:52:50
-      # Raspberry Pi bootloader uses the same client-arch as PC BIOS and downloads its own set of files
+      # Raspberry Pi bootloader identifies PC BIOS client system type (CSA) and requires a specific DHCP Offer with the following text
       - --pxe-service=tag:raspi-bootloader,x86PC,Raspberry Pi Boot
 
       # U-Boot PXE client identifies as ARM64_EFI client system type (CSA)
@@ -57,6 +57,7 @@ services:
 
       # if DHCP userclass is iPXE, add ipxe tag
       - --dhcp-userclass=set:ipxe,iPXE
+      # TODO replace templated ${server} value with `0.0.0.0` which dnsmasq renders to the current IP address of dnsmasq
       - --dhcp-boot=tag:ipxe,http://${server}:8080/assets/introspect.ipxe
 
       # DHCP option 66 (Server-Name) is only populated for dnsmasq pxe-services
