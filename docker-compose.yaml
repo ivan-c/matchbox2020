@@ -35,30 +35,35 @@ services:
 
   dhcpd:
     <<: *dnsmasq_base
-    # todo: use dhcp relay
+    # TODO use dhcp relay
     network_mode: host
     command:
       - --log-queries
       - --log-dhcp
 
+      # Act as ProxyDHCP server
+      # only respond to PXE requests coming from same subnet as the given IP
       - --dhcp-range=192.168.1.0,proxy
 
 
       # Add tag for Raspberry Pi if beginning of DHCP option 97 (UUID/GUID) matches known values for raspi bootloader (`RPi` in ASCII)
       - --dhcp-match=set:raspi-bootloader,option:client-machine-id,00:52:50
-      # Raspberry Pi bootloader uses the same client-arch as PC BIOS and downloads its own set of files
+      # Raspberry Pi bootloader identifies as PC BIOS client system type (CSA) and requires a specific DHCP Offer (DHCP option 43) with the following text
       - --pxe-service=tag:raspi-bootloader,x86PC,Raspberry Pi Boot
+      # Raspberry Pi bootloader downloads config.txt and loads file configured as `kernel`, generally U-Boot
+
 
       # U-Boot PXE client identifies as ARM64_EFI client system type (CSA)
-      # TODO try `ARM64_EFI` instead of `11`
       - --dhcp-match=set:arm64_efi,option:client-arch,11
       # U-Boot PXE client (`bootcmd_dhcp`) reads filename from DHCP option 67 (bootfile)
       - --dhcp-boot=tag:arm64_efi,ipxe/ipxe.arm64.efi
 
       # if DHCP userclass is iPXE, add ipxe tag
       - --dhcp-userclass=set:ipxe,iPXE
+      # TODO replace templated ${server} value with `0.0.0.0` which dnsmasq renders to the current IP address of dnsmasq
       - --dhcp-boot=tag:ipxe,http://${server}:8080/assets/introspect.ipxe
 
+      # TODO investigate why --dhcp-option-force doesn't work with proxyDHCP
       # DHCP option 66 (Server-Name) is only populated for dnsmasq pxe-services
       # TODO consolidate to single dhcp-boot entry when host can be parsed from DHCP filename (URL), or manually set DHCP option 66
     cap_add:
