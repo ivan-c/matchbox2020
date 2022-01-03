@@ -43,35 +43,24 @@ services:
 
       - --dhcp-range=192.168.1.0,proxy
 
+
+      # Add tag for Raspberry Pi if beginning of DHCP option 97 (UUID/GUID) matches known values for raspi bootloader (`RPi` in ASCII)
+      - --dhcp-match=set:raspi-bootloader,option:client-machine-id,00:52:50
+      # Raspberry Pi bootloader uses the same client-arch as PC BIOS and downloads its own set of files
+      - --pxe-service=tag:raspi-bootloader,x86PC,Raspberry Pi Boot
+
+      # U-Boot PXE client identifies as ARM64_EFI client system type (CSA)
+      # TODO try `ARM64_EFI` instead of `11`
+      - --dhcp-match=set:arm64_efi,option:client-arch,11
+      # U-Boot PXE client (`bootcmd_dhcp`) reads filename from DHCP option 67 (bootfile)
+      - --dhcp-boot=tag:arm64_efi,ipxe/ipxe.arm64.efi
+
       # if DHCP userclass is iPXE, add ipxe tag
       - --dhcp-userclass=set:ipxe,iPXE
-
-      # Set Raspberry Pi tag if beginning of DHCP option 97 (UUID/GUID) matches known values
-      - --dhcp-match=set:raspi,option:client-machine-id,00:52:50
-
-
-      # 0th request: download Raspberry Pi firmware
-      # Raspberry Pi uses the same client-arch as PC BIOS and downloads its own set of files
-      - --pxe-service=tag:!ipxe,tag:raspi,x86PC,Raspberry Pi Boot,Netboot RaspberryPi,0.0.0.0
-
-      # 1st request: download iPXE image
-      # 0.0.0.0 is a special value recognized by dnsmasq as the dnsmasq IP address
-      - --pxe-service=tag:!ipxe,x86PC,Boot iPXE with BIOS,ipxe/undionly.kpxe,0.0.0.0
-      - --pxe-service=tag:!ipxe,x86-64_EFI,Boot iPXE with EFI,ipxe/ipxe.efi,0.0.0.0
-      - --pxe-service=tag:!ipxe,ARM64_EFI,Boot iPXE with EFI,ipxe/ipxe.arm64.efi,0.0.0.0
-
-      # TODO refactor to use only dhcp-vendorclass and pxe-service
-      # - --dhcp-vendorclass=set:u_boot_vendorclass,U-Boot.armv8
-      - --dhcp-match=set:uboot,60,PXEClient:Arch:00011:UNDI:003000
-      - --dhcp-boot=tag:uboot,ipxe.efi
-      - --pxe-service=tag:!ipxe,ARM64_EFI,Boot iPXE with EFI,ipxe.efi
+      - --dhcp-boot=tag:ipxe,http://${server}:8080/assets/introspect.ipxe
 
       # DHCP option 66 (Server-Name) is only populated for dnsmasq pxe-services
       # TODO consolidate to single dhcp-boot entry when host can be parsed from DHCP filename (URL), or manually set DHCP option 66
-      # 2nd request: download iPXE script via HTTP and run
-      - --pxe-service=tag:ipxe,x86-64_EFI,Boot system-specific iPXE script,http://${server}:8080/assets/introspect.ipxe
-      - --pxe-service=tag:ipxe,x86PC,Boot system-specific iPXE script,http://${server}:8080/assets/introspect.ipxe
-      - --pxe-service=tag:ipxe,ARM64_EFI,Boot system-specific iPXE script,http://${server}:8080/assets/introspect.ipxe
     cap_add:
       - NET_ADMIN
 
