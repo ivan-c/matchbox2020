@@ -1,0 +1,16 @@
+{
+  "id": "introspect-templating",
+  "name": "debian-installer for buster",
+  "generic_id": "introspect.ipxe",
+  "boot": {
+    "kernel": "http://mirrors.edge.kernel.org/debian/dists/buster/main/installer-amd64/current/images/netboot/debian-installer/amd64/linux",
+    "initrd": ["http://mirrors.edge.kernel.org/debian/dists/buster/main/installer-amd64/current/images/netboot/debian-installer/amd64/initrd.gz"],
+    "args": [
+      "initrd=initrd.gz",
+      "url=http://${66}:8080/generic?uuid=${uuid}&mac=${mac:hexhyp}&server-name=${66}",
+      "auto-install/enable=true",
+      "suite=buster",
+      "priority=critical"
+    ]
+  }
+}
