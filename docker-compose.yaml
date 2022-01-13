@@ -55,8 +55,8 @@ services:
 
       # U-Boot PXE client identifies as ARM64_EFI client system type (CSA)
       - --dhcp-match=set:arm64_efi,option:client-arch,11
-      # TODO separate ipxe binaries by arch
-      - --dhcp-boot=tag:arm64_efi,ipxe.efi
+      # U-Boot PXE client (`bootcmd_dhcp`) reads filename from DHCP option 67 (bootfile)
+      - --dhcp-boot=tag:arm64_efi,ipxe/ipxe.arm64.efi
 
       # if DHCP userclass is iPXE, add ipxe tag
       - --dhcp-userclass=set:ipxe,iPXE
