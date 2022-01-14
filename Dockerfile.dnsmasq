@@ -1,4 +1,4 @@
-# extract firmware needed to boot
+# extract Raspberry Pi firmware needed to boot
 FROM alpine:3.10 as raspi-firmware
 ARG RASPI_FIRMWARE_VERSION=1.20210928
 ADD https://github.com/raspberrypi/firmware/archive/refs/tags/${RASPI_FIRMWARE_VERSION}.tar.gz ${RASPI_FIRMWARE_VERSION}.tar.gz
@@ -7,6 +7,7 @@ WORKDIR firmware-${RASPI_FIRMWARE_VERSION}
 RUN cp -R boot/ /tmp/boot
 
 
+# build dnsmasq image bundled with proxyDHCP-enabled U-Boot and iPXE
 FROM alpine:3.10
 RUN apk --update-cache add dnsmasq
 ARG TFTP_ROOT=/var/lib/tftpboot
