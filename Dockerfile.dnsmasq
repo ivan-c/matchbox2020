@@ -1,8 +1,17 @@
+# extract firmware needed to boot
+FROM alpine:3.10 as raspi-firmware
+ARG RASPI_FIRMWARE_VERSION=1.20210928
+ADD https://github.com/raspberrypi/firmware/archive/refs/tags/${RASPI_FIRMWARE_VERSION}.tar.gz ${RASPI_FIRMWARE_VERSION}.tar.gz
+RUN tar xvf ${RASPI_FIRMWARE_VERSION}.tar.gz
+WORKDIR firmware-${RASPI_FIRMWARE_VERSION}
+RUN cp -R boot/ /tmp/boot
+
+
 FROM alpine:3.10
 RUN apk --update-cache add dnsmasq
 
 ARG TFTP_ROOT=/var/lib/tftpboot
-
+COPY --from=raspi-firmware /tmp/boot $TFTP_ROOT
 RUN mkdir -p $TFTP_ROOT/ipxe
 
 ADD http://boot.ipxe.org/undionly.kpxe $TFTP_ROOT/ipxe
