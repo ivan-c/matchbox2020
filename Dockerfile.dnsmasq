@@ -12,6 +12,12 @@ FROM alpine:3.10
 RUN apk --update-cache add dnsmasq
 ARG TFTP_ROOT=/var/lib/tftpboot
 COPY --from=raspi-firmware /tmp/boot ${TFTP_ROOT}
+# downloaded via TFTP by U-Boot; TODO investigate
+RUN \
+    install -D -m 644 -o root -g root \
+        ${TFTP_ROOT}/bcm2711-rpi-4-b.dtb \
+        ${TFTP_ROOT}/dtb/broadcom/bcm2711-rpi-4-b.dtb
+
 RUN mkdir -p ${TFTP_ROOT}/ipxe
 ADD https://boot.ipxe.org/undionly.kpxe ${TFTP_ROOT}/ipxe
 ADD https://boot.ipxe.org/ipxe.efi ${TFTP_ROOT}/ipxe
