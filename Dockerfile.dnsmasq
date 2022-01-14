@@ -15,6 +15,8 @@ RUN mkdir -p ${TFTP_ROOT}/ipxe
 ADD https://boot.ipxe.org/undionly.kpxe ${TFTP_ROOT}/ipxe
 ADD https://boot.ipxe.org/ipxe.efi ${TFTP_ROOT}/ipxe
 RUN chmod -R 644 ${TFTP_ROOT}
+ARG U_BOOT_URL=https://github.com/ivan-c/u-boot-raspi-builder/releases/download/v2021.10-rc.1/u-boot.bin
+ADD ${U_BOOT_URL} ${TFTP_ROOT}/
 
 EXPOSE 53 67 69
 ENTRYPOINT ["/usr/sbin/dnsmasq"]
