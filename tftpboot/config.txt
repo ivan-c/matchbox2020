@@ -11,7 +11,7 @@
 # to support old firmwares.
 
 [pi4]
-kernel=u-boot.bin
+kernel=uboot_rpi_4.bin
 max_framebuffers=2
 
 [pi2]

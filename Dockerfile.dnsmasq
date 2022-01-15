@@ -23,7 +23,8 @@ ADD https://boot.ipxe.org/undionly.kpxe ${TFTP_ROOT}/ipxe
 ADD https://boot.ipxe.org/ipxe.efi ${TFTP_ROOT}/ipxe
 COPY tftpboot/ ${TFTP_ROOT}
 ARG U_BOOT_URL=https://github.com/ivan-c/u-boot-raspi-builder/releases/download/v2021.10-rc.1/u-boot.bin
-ADD ${U_BOOT_URL} ${TFTP_ROOT}/
+ADD ${U_BOOT_URL} ${TFTP_ROOT}/uboot_rpi_4.bin
+
 # TODO set permissions when adding files
 RUN chmod -R 644 ${TFTP_ROOT}
 
