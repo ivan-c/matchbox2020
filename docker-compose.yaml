@@ -35,7 +35,7 @@ services:
 
   dhcpd:
     <<: *dnsmasq_base
-    # todo: use dhcp relay
+    # TODO use dhcp relay
     network_mode: host
     command:
       - --log-queries
