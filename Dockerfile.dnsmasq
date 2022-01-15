@@ -9,6 +9,7 @@ RUN cp -R boot/ /tmp/boot
 
 # build dnsmasq image bundled with proxyDHCP-enabled U-Boot and iPXE
 FROM alpine:3.10
+LABEL org.opencontainers.image.source https://github.com/ivan-c/matchbox2020
 RUN apk --update-cache add dnsmasq
 ARG TFTP_ROOT=/var/lib/tftpboot
 COPY --from=raspi-firmware /tmp/boot ${TFTP_ROOT}

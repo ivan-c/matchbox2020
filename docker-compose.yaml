@@ -4,6 +4,7 @@ x-dnsmasq-base: &dnsmasq_base
   build:
     dockerfile: Dockerfile.dnsmasq
     context: .
+  image: ghcr.io/ivan-c/dnsmasq-pxe
   entrypoint:
     - dnsmasq
     - --log-facility=-
