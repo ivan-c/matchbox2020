@@ -79,5 +79,3 @@ services:
 
     # TODO build universal (not machine-specific) tftp files into docker image
     # https://github.com/pftf/RPi4/issues/59
-    volumes:
-      - ./tftpboot:/var/lib/tftpboot
