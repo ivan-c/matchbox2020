@@ -18,10 +18,15 @@ RUN \
         ${TFTP_ROOT}/bcm2711-rpi-4-b.dtb \
         ${TFTP_ROOT}/dtb/broadcom/bcm2711-rpi-4-b.dtb
 
+COPY tftpboot/ ${TFTP_ROOT}
+
 RUN mkdir -p ${TFTP_ROOT}/ipxe
 ADD https://boot.ipxe.org/undionly.kpxe ${TFTP_ROOT}/ipxe
 ADD https://boot.ipxe.org/ipxe.efi ${TFTP_ROOT}/ipxe
-COPY tftpboot/ ${TFTP_ROOT}
+
+ARG IPXE_URL=https://github.com/ivan-c/ipxe-raspi-builder/releases/download/v1.21.1-181-ge09e1142-rc.1/ipxe.efi
+ADD ${IPXE_URL} ${TFTP_ROOT}/ipxe/ipxe.arm64.efi
+
 ARG U_BOOT_URL=https://github.com/ivan-c/u-boot-raspi-builder/releases/download/v2021.10-rc.1/u-boot.bin
 ADD ${U_BOOT_URL} ${TFTP_ROOT}/uboot_rpi_4.bin
 
