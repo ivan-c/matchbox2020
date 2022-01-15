@@ -41,31 +41,31 @@ services:
       - --log-queries
       - --log-dhcp
 
+      # Act as ProxyDHCP server
+      # only respond to PXE requests coming from same subnet as the given IP
       - --dhcp-range=192.168.1.0,proxy
+
+
+      # Add tag for Raspberry Pi if beginning of DHCP option 97 (UUID/GUID) matches known values for raspi bootloader (`RPi` in ASCII)
+      - --dhcp-match=set:raspi-bootloader,option:client-machine-id,00:52:50
+      # Raspberry Pi bootloader identifies as PC BIOS client system type (CSA) and requires a specific DHCP Offer (DHCP option 43) with the following text
+      - --pxe-service=tag:raspi-bootloader,x86PC,Raspberry Pi Boot
+      # Raspberry Pi bootloader downloads config.txt and loads file configured as `kernel`, generally U-Boot
+
+
+      # U-Boot PXE client identifies as ARM64_EFI client system type (CSA)
+      - --dhcp-match=set:arm64_efi,option:client-arch,11
+      # U-Boot PXE client (`bootcmd_dhcp`) reads filename from DHCP option 67 (bootfile)
+      - --dhcp-boot=tag:arm64_efi,ipxe/ipxe.arm64.efi
 
       # if DHCP userclass is iPXE, add ipxe tag
       - --dhcp-userclass=set:ipxe,iPXE
+      # TODO replace templated ${server} value with `0.0.0.0` which dnsmasq renders to the current IP address of dnsmasq
+      - --dhcp-boot=tag:ipxe,http://${server}:8080/assets/introspect.ipxe
 
-      # Set Raspberry Pi tag if beginning of DHCP option 97 (UUID/GUID) matches known values
-      - --dhcp-match=set:raspi,option:client-machine-id,00:52:50
-
-
-      # 0th request: download Raspberry Pi firmware
-      # Raspberry Pi uses the same client-arch as PC BIOS and downloads its own set of files
-      - --pxe-service=tag:!ipxe,tag:raspi,x86PC,Raspberry Pi Boot,Netboot RaspberryPi,0.0.0.0
-
-      # 1st request: download iPXE image
-      # 0.0.0.0 is a special value recognized by dnsmasq as the dnsmasq IP address
-      - --pxe-service=tag:!ipxe,x86PC,Boot iPXE with BIOS,ipxe/undionly.kpxe,0.0.0.0
-      - --pxe-service=tag:!ipxe,x86-64_EFI,Boot iPXE with EFI,ipxe/ipxe.efi,0.0.0.0
-      - --pxe-service=tag:!ipxe,ARM64_EFI,Boot iPXE with EFI,ipxe/ipxe.arm64.efi,0.0.0.0
-
+      # TODO investigate why --dhcp-option-force doesn't work with proxyDHCP
       # DHCP option 66 (Server-Name) is only populated for dnsmasq pxe-services
       # TODO consolidate to single dhcp-boot entry when host can be parsed from DHCP filename (URL), or manually set DHCP option 66
-      # 2nd request: download iPXE script via HTTP and run
-      - --pxe-service=tag:ipxe,x86-64_EFI,Boot system-specific iPXE script,http://${server}:8080/assets/introspect.ipxe
-      - --pxe-service=tag:ipxe,x86PC,Boot system-specific iPXE script,http://${server}:8080/assets/introspect.ipxe
-      - --pxe-service=tag:ipxe,ARM64_EFI,Boot system-specific iPXE script,http://${server}:8080/assets/introspect.ipxe
     cap_add:
       - NET_ADMIN
 
@@ -79,5 +79,3 @@ services:
 
     # TODO build universal (not machine-specific) tftp files into docker image
     # https://github.com/pftf/RPi4/issues/59
-    volumes:
-      - ./tftpboot:/var/lib/tftpboot
