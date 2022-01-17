@@ -61,7 +61,7 @@ services:
       # if DHCP userclass is iPXE, add ipxe tag
       - --dhcp-userclass=set:ipxe,iPXE
       # TODO replace templated ${server} value with `0.0.0.0` which dnsmasq renders to the current IP address of dnsmasq
-      - --dhcp-boot=tag:ipxe,http://${server}:8080/generic/introspect.ipxe?server-name=${server}
+      - --dhcp-boot=tag:ipxe,http://${server}:8080/generic?template=introspect&server-name=${server}
 
       # TODO investigate why --dhcp-option-force doesn't work with proxyDHCP
       # DHCP option 66 (Server-Name) is only populated for dnsmasq pxe-services
