@@ -1,3 +1,11 @@
 #!ipxe
 # based on /boot.ipxe, pass additional iPXE settings
-chain /ipxe?uuid=${uuid}&mac=${mac:hexhyp}&domain=${domain}&hostname=${hostname}&serial=${serial}&buildarch=${buildarch}&manufacturer=${manufacturer}&product=${product}
+chain /ipxe?\
+uuid=${uuid}&\
+mac=${mac:hexhyp}&\
+domain=${domain}&\
+hostname=${hostname}&\
+serial=${serial}&\
+buildarch=${buildarch}&\
+manufacturer=${manufacturer}&\
+product=${product}
