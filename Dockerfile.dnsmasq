@@ -5,6 +5,11 @@ ADD https://github.com/raspberrypi/firmware/archive/refs/tags/${RASPI_FIRMWARE_V
 RUN tar xvf ${RASPI_FIRMWARE_VERSION}.tar.gz
 WORKDIR firmware-${RASPI_FIRMWARE_VERSION}
 RUN cp -R boot/ /tmp/boot
+# downloaded via TFTP by U-Boot; TODO investigate
+RUN \
+    install -D -m 644 -o root -g root \
+        /tmp/boot/bcm2711-rpi-4-b.dtb \
+        /tmp/boot/dtb/broadcom/bcm2711-rpi-4-b.dtb
 
 
 # build dnsmasq image bundled with proxyDHCP-enabled U-Boot and iPXE
@@ -13,11 +18,6 @@ LABEL org.opencontainers.image.source https://github.com/ivan-c/matchbox2020
 RUN apk --update-cache add dnsmasq
 ARG TFTP_ROOT=/var/lib/tftpboot
 COPY --from=raspi-firmware /tmp/boot ${TFTP_ROOT}
-# downloaded via TFTP by U-Boot; TODO investigate
-RUN \
-    install -D -m 644 -o root -g root \
-        ${TFTP_ROOT}/bcm2711-rpi-4-b.dtb \
-        ${TFTP_ROOT}/dtb/broadcom/bcm2711-rpi-4-b.dtb
 
 RUN mkdir -p ${TFTP_ROOT}/ipxe
 ADD https://boot.ipxe.org/undionly.kpxe ${TFTP_ROOT}/ipxe
