@@ -76,6 +76,3 @@ services:
       - --tftp-root=/var/lib/tftpboot
     ports:
       - "69:69/udp"
-
-    # TODO build universal (not machine-specific) tftp files into docker image
-    # https://github.com/pftf/RPi4/issues/59
