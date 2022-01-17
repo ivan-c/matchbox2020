@@ -1,6 +1,14 @@
 #!ipxe
+
+{{ if index .request.query "server-name" }}
+set server-name {{ index .request.query "server-name" }}
+nslookup server-address ${server-name}
+{{ end }}
+
 # based on /boot.ipxe, pass additional iPXE settings
 chain /ipxe?\
+server-name=${server-name}&\
+server-address=${server-address}&\
 uuid=${uuid}&\
 mac=${mac:hexhyp}&\
 domain=${domain}&\
