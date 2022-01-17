@@ -32,7 +32,8 @@ ADD ${U_BOOT_URL} ${TFTP_ROOT}/uboot_rpi_4.bin
 COPY tftpboot/ ${TFTP_ROOT}
 
 # TODO set permissions when adding files
-RUN chmod -R 644 ${TFTP_ROOT}
+# dnsmasq requires tftp files be world-readable
+RUN chmod --recursive o+r ${TFTP_ROOT}
 
 EXPOSE 53 67 69
 ENTRYPOINT ["/usr/sbin/dnsmasq"]
