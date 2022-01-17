@@ -19,8 +19,6 @@ RUN \
         ${TFTP_ROOT}/bcm2711-rpi-4-b.dtb \
         ${TFTP_ROOT}/dtb/broadcom/bcm2711-rpi-4-b.dtb
 
-COPY tftpboot/ ${TFTP_ROOT}
-
 RUN mkdir -p ${TFTP_ROOT}/ipxe
 ADD https://boot.ipxe.org/undionly.kpxe ${TFTP_ROOT}/ipxe
 ADD https://boot.ipxe.org/ipxe.efi ${TFTP_ROOT}/ipxe
@@ -30,6 +28,8 @@ ADD ${IPXE_URL} ${TFTP_ROOT}/ipxe/ipxe.arm64.efi
 
 ARG U_BOOT_URL=https://github.com/ivan-c/u-boot-raspi-builder/releases/download/v2021.10-rc.1/u-boot.bin
 ADD ${U_BOOT_URL} ${TFTP_ROOT}/uboot_rpi_4.bin
+
+COPY tftpboot/ ${TFTP_ROOT}
 
 # TODO set permissions when adding files
 RUN chmod -R 644 ${TFTP_ROOT}
