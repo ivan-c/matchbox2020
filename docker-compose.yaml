@@ -17,10 +17,9 @@ x-dnsmasq-base: &dnsmasq_base
 
 services:
   matchbox:
+    # TODO update when new release added
+    image: quay.io/poseidon/matchbox:v0.9.0-90-g07f0906
     restart: unless-stopped
-    build:
-      dockerfile: Dockerfile.matchbox
-      context: .
     volumes:
       - ./matchbox:/tmp/matchbox:ro
       - ./docker-entrypoint.sh:/bin/entrypoint.sh:ro
@@ -29,7 +28,7 @@ services:
       MATCHBOX_LOG_LEVEL: debug
       MATCHBOX_ADDRESS: 0.0.0.0:8080
     entrypoint: /bin/entrypoint.sh
-    command: /bin/matchbox
+    command: /matchbox
     env_file: matchbox.env
     ports:
       - 8080:8080
