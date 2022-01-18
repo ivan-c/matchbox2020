@@ -8,6 +8,7 @@
       "initrd=initrd.img",
       "earlyprintk",
       "console=tty1",
+      "console=ttyS0,115200",
       "root=/dev/nfs",
       "nfsroot=${__nfs_ip}:/${__nfs_host}/system-images/rpi4b/debian-arm64/bullseye/${hostname},vers=3",
       "rw",

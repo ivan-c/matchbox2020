@@ -31,5 +31,6 @@ jobs:
             linux/amd64
             linux/arm64
           push: true
+          # TODO use docker/metadata-action to tag via `type=ref`
           tags: |
             ghcr.io/ivan-c/dnsmasq-pxe:latest
