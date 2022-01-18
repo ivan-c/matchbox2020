@@ -7,7 +7,7 @@
     "initrd": ["http://mirrors.edge.kernel.org/debian/dists/buster/main/installer-amd64/current/images/netboot/debian-installer/amd64/initrd.gz"],
     "args": [
       "initrd=initrd.gz",
-      "url=http://${66}:8080/generic?uuid=${uuid}&mac=${mac:hexhyp}&server-name=${66}",
+      "url=http://${server-name}:8080/generic?uuid=${uuid}&mac=${mac:hexhyp}&server-name=${server-name}",
       "auto-install/enable=true",
       "suite=buster",
       "priority=critical"

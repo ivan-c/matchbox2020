@@ -1,8 +1,14 @@
 #!ipxe
 
+echo Template debugging:
+echo {{ printf "%#v" . }}
+
+
 {{ if index .request.query "server-name" }}
 set server-name {{ index .request.query "server-name" }}
 {{ end }}
+
+echo server-name: ${server-name}
 
 # based on /boot.ipxe, pass additional iPXE settings
 chain /ipxe?\
