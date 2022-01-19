@@ -32,11 +32,8 @@ jobs:
             ghcr.io/ivan-c/dnsmasq-pxe
           # generate Docker tags based on the following events/attributes
           tags: |
-            # branch event
             type=ref,event=branch
-            # tag event
             type=ref,event=tag
-            # pull request event
             type=ref,event=pr
 
       - name: Build and push
