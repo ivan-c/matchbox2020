@@ -23,6 +23,19 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Collect docker metadata
+        id: meta
+        uses: docker/metadata-action@v3
+        with:
+          # list of Docker images to use as base name for tags
+          images: |
+            ghcr.io/ivan-c/dnsmasq-pxe
+          # generate Docker tags based on the following events/attributes
+          tags: |
+            type=ref,event=branch
+            type=ref,event=tag
+            type=ref,event=pr
+
       - name: Build and push
         uses: docker/build-push-action@v2
         with:
@@ -31,6 +44,5 @@ jobs:
             linux/amd64
             linux/arm64
           push: true
-          # TODO use docker/metadata-action to tag via `type=ref`
-          tags: |
-            ghcr.io/ivan-c/dnsmasq-pxe:latest
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
